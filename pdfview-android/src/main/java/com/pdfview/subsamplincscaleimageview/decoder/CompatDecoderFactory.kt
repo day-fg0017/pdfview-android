@@ -1,48 +1,38 @@
-package com.pdfview.subsamplincscaleimageview.decoder;
+package com.pdfview.subsamplincscaleimageview.decoder
 
-import android.graphics.Bitmap;
-import androidx.annotation.NonNull;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import android.graphics.Bitmap
+import java.lang.reflect.InvocationTargetException
 
 /**
  * Compatibility factory to instantiate decoders with empty public constructors.
  * @param <T> The base type of the decoder this factory will produce.
- */
-@SuppressWarnings("WeakerAccess")
-public class CompatDecoderFactory<T> implements DecoderFactory<T> {
-
-    private final Class<? extends T> clazz;
-    private final Bitmap.Config bitmapConfig;
-
+</T> */
+class CompatDecoderFactory<T>
+/**
+ * Construct a factory for the given class. This must have a default constructor.
+ * @param clazz a class that implements [ImageDecoder] or [ImageRegionDecoder].
+ */ @JvmOverloads constructor(
+    private val clazz: Class<out T>,
+    private val bitmapConfig: Bitmap.Config? = null
+) : DecoderFactory<T> {
     /**
-     * Construct a factory for the given class. This must have a default constructor.
-     * @param clazz a class that implements {@link ImageDecoder} or {@link ImageRegionDecoder}.
-     */
-    public CompatDecoderFactory(@NonNull Class<? extends T> clazz) {
-    this(clazz, null);
-    }
-
-    /**
-     * Construct a factory for the given class. This must have a constructor that accepts a {@link Bitmap.Config} instance.
-     * @param clazz a class that implements {@link ImageDecoder} or {@link ImageRegionDecoder}.
+     * Construct a factory for the given class. This must have a constructor that accepts a [Bitmap.Config] instance.
+     * @param clazz a class that implements [ImageDecoder] or [ImageRegionDecoder].
      * @param bitmapConfig bitmap configuration to be used when loading images.
      */
-    public CompatDecoderFactory(@NonNull Class<? extends T> clazz, Bitmap.Config bitmapConfig) {
-        this.clazz = clazz;
-        this.bitmapConfig = bitmapConfig;
-    }
 
-    @Override
-    @NonNull
-    public T make() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    @Throws(
+        IllegalAccessException::class,
+        InstantiationException::class,
+        NoSuchMethodException::class,
+        InvocationTargetException::class
+    )
+    override fun make(): T {
         if (bitmapConfig == null) {
-            return clazz.newInstance();
+            return clazz.newInstance()
         } else {
-            Constructor<? extends T> ctor = clazz.getConstructor(Bitmap.Config.class);
-            return ctor.newInstance(bitmapConfig);
+            val ctor = clazz.getConstructor(Bitmap.Config::class.java)
+            return ctor.newInstance(bitmapConfig)
         }
     }
-
 }

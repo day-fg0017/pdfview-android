@@ -1,41 +1,16 @@
-package com.pdfview.subsamplincscaleimageview;
+package com.pdfview.subsamplincscaleimageview
 
-import android.graphics.PointF;
-import androidx.annotation.NonNull;
-
-import java.io.Serializable;
+import android.graphics.PointF
+import java.io.Serializable
 
 /**
  * Wraps the scale, center and orientation of a displayed image for easy restoration on screen rotate.
  */
-@SuppressWarnings("WeakerAccess")
-public class ImageViewState implements Serializable {
+class ImageViewState(val scale: Float, center: PointF, val orientation: Int) : Serializable {
+    private val centerX = center.x
 
-    private final float scale;
+    private val centerY = center.y
 
-    private final float centerX;
-
-    private final float centerY;
-
-    private final int orientation;
-
-    public ImageViewState(float scale, @NonNull PointF center, int orientation) {
-        this.scale = scale;
-        this.centerX = center.x;
-        this.centerY = center.y;
-        this.orientation = orientation;
-    }
-
-    public float getScale() {
-        return scale;
-    }
-
-    @NonNull public PointF getCenter() {
-        return new PointF(centerX, centerY);
-    }
-
-    public int getOrientation() {
-        return orientation;
-    }
-
+    val center: PointF
+        get() = PointF(centerX, centerY)
 }

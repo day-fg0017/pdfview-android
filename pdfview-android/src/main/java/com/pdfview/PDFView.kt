@@ -4,9 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import com.pdfview.subsamplincscaleimageview.ImageSource
 import com.pdfview.subsamplincscaleimageview.SubsamplingScaleImageView
+import com.pdfview.subsamplincscaleimageview.decoder.DecoderFactory
+import com.pdfview.subsamplincscaleimageview.decoder.ImageRegionDecoder
 import java.io.File
 
-class PDFView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : SubsamplingScaleImageView(context, attrs) {
+class PDFView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+    SubsamplingScaleImageView(context, attrs) {
 
     private var mfile: File? = null
     private var mScale: Float = 8f
@@ -38,7 +41,10 @@ class PDFView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
     fun show() {
         val source = ImageSource.uri(mfile!!.path)
-        setRegionDecoderFactory { PDFRegionDecoder(view = this, file = mfile!!, scale = mScale) }
+        setRegionDecoderFactory(object : DecoderFactory<ImageRegionDecoder> {
+            override fun make() =
+                PDFRegionDecoder(view = this@PDFView, file = mfile!!, scale = mScale)
+        })
         setImage(source)
     }
 

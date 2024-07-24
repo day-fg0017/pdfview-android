@@ -2,7 +2,7 @@
 
 buildscript {
     ext.versions = [
-            'minSdk': 31,
+            'minSdk': 28,
             'compileSdk': 34,
             'targetSdk': 34,
             'buildTools':'32.1.0-rc1',
@@ -15,7 +15,7 @@ buildscript {
          google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.5.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
         classpath "org.jetbrains.kotlinx:binary-compatibility-validator:0.7.0"
     }
